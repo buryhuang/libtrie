@@ -3,7 +3,9 @@
 class TrieNode {
 public:
 	// Initialize your data structure here.
-	TrieNode() {
+	TrieNode():
+		isEnd_(false)
+	{
 		for (int idx = 0; idx < 26; idx++) {
 			links_[idx] = nullptr;
 		}
@@ -62,21 +64,28 @@ public:
 	// Returns if the word is in the trie.
 	bool search(std::string word) {
 		TrieNode * curr = root;
-		for (int idx = 0; idx < word.size(); idx++) {
-			if (curr->isEnd()) {
-				break;
-			}
-			else {
-				curr = curr->getNode(word[idx]);
+		int idx = 0;
+		for (idx = 0; idx < word.size(); idx++) {
+			curr = curr->getNode(word[idx]);
+			if (curr == NULL) {
+				return false;
 			}
 		}
-		return curr->isEnd() ? false : true;
+		return curr->isEnd() ? true : false;
 	}
 
 	// Returns if there is any word in the trie
 	// that starts with the given prefix.
 	bool startsWith(std::string prefix) {
-		return search(prefix);
+		TrieNode * curr = root;
+		int idx = 0;
+		for (idx = 0; idx < prefix.size(); idx++) {
+			curr = curr->getNode(prefix[idx]);
+			if (curr == NULL) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 private:
